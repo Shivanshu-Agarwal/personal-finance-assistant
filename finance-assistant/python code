@@ -1,0 +1,99 @@
+class PersonalFinanceAssistant:
+    def __init__(self):
+        self.expenses = []
+        self.income = []
+        self.savings_goals = []
+
+    def add_expense(self):
+        description = input("Enter expense description: ")
+        amount = float(input("Enter expense amount: "))
+        category = input("Enter expense category: ")
+        self.expenses.append({"description": description, "amount": amount, "category": category})
+
+    def add_income(self):
+        description = input("Enter income description: ")
+        amount = float(input("Enter income amount: "))
+        self.income.append({"description": description, "amount": amount})
+
+    def add_savings_goal(self):
+        description = input("Enter savings goal description: ")
+        target_amount = float(input("Enter target amount for the savings goal: "))
+        self.savings_goals.append({"description": description, "target_amount": target_amount, "current_amount": 0})
+
+    def calculate_total_expenses(self):
+        total_expenses = sum(expense["amount"] for expense in self.expenses)
+        return total_expenses
+
+    def calculate_total_income(self):
+        total_income = sum(income["amount"] for income in self.income)
+        return total_income
+
+    def calculate_balance(self):
+        total_income = self.calculate_total_income()
+        total_expenses = self.calculate_total_expenses()
+        balance = total_income - total_expenses
+        return balance
+
+    def calculate_category_expenses(self):
+        category_expenses = {}
+        for expense in self.expenses:
+            category = expense["category"]
+            amount = expense["amount"]
+            if category in category_expenses:
+                category_expenses[category] += amount
+            else:
+                category_expenses[category] = amount
+        return category_expenses
+
+    def update_savings_goal(self, description, amount):
+        for goal in self.savings_goals:
+            if goal["description"] == description:
+                goal["current_amount"] += amount
+                break
+
+    def print_summary(self):
+        print("----- Personal Finance Summary -----")
+        print("Expenses:")
+        for expense in self.expenses:
+            print(f"- {expense['description']}: ${expense['amount']} ({expense['category']})")
+        print("Income:")
+        for income in self.income:
+            print(f"- {income['description']}: ${income['amount']}")
+        print("-------------------------------")
+        total_expenses = self.calculate_total_expenses()
+        total_income = self.calculate_total_income()
+        balance = self.calculate_balance()
+        print(f"Total Expenses: ${total_expenses}")
+        print(f"Total Income: ${total_income}")
+        print(f"Balance: ${balance}")
+        print("Category Expenses:")
+        category_expenses = self.calculate_category_expenses()
+        for category, amount in category_expenses.items():
+            print(f"- {category}: ${amount}")
+        print("Savings Goals:")
+        for goal in self.savings_goals:
+            description = goal["description"]
+            target_amount = goal["target_amount"]
+            current_amount = goal["current_amount"]
+            print(f"- {description}: ${current_amount}/{target_amount}")
+
+
+# Example usage
+assistant = PersonalFinanceAssistant()
+
+add_expense = input("Do you want to add an expense? (y/n): ")
+while add_expense.lower() == "y":
+    assistant.add_expense()
+    add_expense = input("Do you want to add another expense? (y/n): ")
+
+add_income = input("Do you want to add an income? (y/n): ")
+while add_income.lower() == "y":
+    assistant.add_income()
+    add_income = input("Do you want to add another income? (y/n): ")
+
+add_goal = input("Do you want to add a savings goal? (y/n): ")
+while add_goal.lower() == "y":
+    assistant.add_savings_goal()
+    add_goal = input("Do you want to add another savings goal? (y/n): ")
+
+assistant.print_summary()
